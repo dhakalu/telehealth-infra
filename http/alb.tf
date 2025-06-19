@@ -68,5 +68,5 @@ resource "aws_ssm_parameter" "alb_listener_http_arn" {
 resource "aws_ssm_parameter" "alb_listener_https_arn" {
     name  = "/http/${var.environment}/alb_listener_https_arn"
     type  = "String"
-    value = aws_lb_listener.http.arn
+    value = aws_lb_listener.https.arn
 }
