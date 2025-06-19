@@ -47,6 +47,7 @@ resource "aws_rds_cluster" "aurora" {
   vpc_security_group_ids = [aws_security_group.db.id]
   skip_final_snapshot    = true
   iam_database_authentication_enabled = true
+  enable_http_endpoint = true
 
   serverlessv2_scaling_configuration {
     min_capacity = 0.5
@@ -80,4 +81,11 @@ output "aurora_endpoint" {
 }
 output "aurora_reader_endpoint" {
     value = aws_rds_cluster.aurora.reader_endpoint
+}
+
+resource "aws_ssm_parameter" "aurora_password" {
+    name      = "/rds/${var.environment}/aurora_password"
+    type      = "SecureString"
+    value     = random_password.password.result
+    overwrite = true
 }
