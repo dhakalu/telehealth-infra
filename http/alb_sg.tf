@@ -31,3 +31,9 @@ resource "aws_security_group" "alb_sg" {
         Name = "${local.name_prefix}-alb-sg"
     }
 }
+
+resource "aws_ssm_parameter" "alb_subnet_id" {
+    name  = "/http/alb/subnet_id"
+    type  = "String"
+    value = aws_security_group.alb_sg.id
+}
