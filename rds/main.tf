@@ -64,10 +64,28 @@ resource "aws_rds_cluster_instance" "aurora_instance" {
   engine_version     = aws_rds_cluster.aurora.engine_version
 }
 
+resource "aws_ssm_parameter" "db_security_group_id" {
+    name  = "/rds/${var.environment}/db_security_group_id"
+    type  = "String"
+    value = aws_security_group.db.id
+}
+
 resource "aws_ssm_parameter" "aurora_endpoint" {
     name  = "/rds/${var.environment}/aurora_endpoint"
     type  = "String"
     value = aws_rds_cluster.aurora.endpoint
+}
+
+resource "aws_ssm_parameter" "db_name" {
+    name  = "/rds/${var.environment}/db_name"
+    type  = "String"
+    value =  var.db_name
+}
+
+resource "aws_ssm_parameter" "db_username" {
+    name  = "/rds/${var.environment}/db_username"
+    type  = "String"
+    value =  var.db_username
 }
 
 resource "aws_ssm_parameter" "aurora_reader_endpoint" {
