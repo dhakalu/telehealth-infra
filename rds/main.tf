@@ -15,6 +15,15 @@ resource "aws_security_group" "db" {
         cidr_blocks      = ["0.0.0.0/0"]
     }
 
+    # temporary ingress rule to allow public access for testing purposes
+    ingress {
+        description      = "Allow access from the public subnets"
+        from_port        = 5432
+        to_port          = 5432
+        protocol         = "tcp"
+        cidr_blocks      = ["0.0.0.0/0"]
+    }
+
     tags = {
         Name = "${local.name_prefix}-db-sg"
     }
@@ -49,6 +58,8 @@ resource "aws_rds_cluster" "aurora" {
   iam_database_authentication_enabled = true
   enable_http_endpoint = true
 
+  enabled_cloudwatch_logs_exports = ["iam-db-auth-error"]
+
   serverlessv2_scaling_configuration {
     min_capacity = 0.5
     max_capacity = 2
@@ -62,6 +73,8 @@ resource "aws_rds_cluster_instance" "aurora_instance" {
   instance_class     = "db.serverless"
   engine             = aws_rds_cluster.aurora.engine
   engine_version     = aws_rds_cluster.aurora.engine_version
+
+  publicly_accessible = true
 }
 
 resource "aws_ssm_parameter" "db_security_group_id" {
