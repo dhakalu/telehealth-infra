@@ -17,3 +17,17 @@ resource "aws_ssm_parameter" "liquibase_ecr_repository_name" {
   type  = "String"
   value = aws_ecr_repository.main.name
 }
+
+resource "aws_ecr_repository" "ui" {
+  name = "telehealth-ui"
+  image_tag_mutability = "MUTABLE"
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ssm_parameter" "ui_ecr_repository_name" {
+  name  = "/ecrs/ui_repository_name"
+  type  = "String"
+  value = aws_ecr_repository.ui.name
+}
