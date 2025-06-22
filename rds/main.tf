@@ -54,6 +54,7 @@ resource "aws_db_instance" "postgres" {
   username                = var.db_username
   password                = random_password.password.result
   db_subnet_group_name    = aws_db_subnet_group.postgres.name
+  iam_database_authentication_enabled = true
   vpc_security_group_ids  = [aws_security_group.db.id]
   skip_final_snapshot     = true
   publicly_accessible     = true
@@ -75,7 +76,7 @@ resource "aws_ssm_parameter" "db_security_group_id" {
 resource "aws_ssm_parameter" "db_endpoint" {
     name  = "/rds/${var.environment}/db_endpoint"
     type  = "String"
-    value = aws_db_instance.postgres.endpoint
+    value = aws_db_instance.postgres.address
 }
 
 resource "aws_ssm_parameter" "db_name" {
