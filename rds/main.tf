@@ -40,7 +40,7 @@ resource "aws_db_subnet_group" "postgres" {
 resource "random_password" "password" {
   length           = 20
   special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  override_special = "!#$%*()-_=+[]{}<>:?"
 }
 
 resource "aws_db_instance" "postgres" {
